@@ -13,29 +13,29 @@ class MovieDetailsViewController: UIViewController {
 //        
 //    }()
     
-    private let moviePoster: UIImageView = {
-        let image = UIImageView()
-        image.contentMode = .scaleToFill
-        image.image = UIImage(named: "movie3")
-        image.backgroundColor = .black
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    }()
-    
-    private lazy var trailerButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "details_button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+//    private let moviePoster: UIImageView = {
+//        let image = UIImageView()
+//        image.contentMode = .scaleToFill
+//        image.image = UIImage(named: "movie3")
+//        image.backgroundColor = .black
+//        image.translatesAutoresizingMaskIntoConstraints = false
+//        return image
+//    }()
+//    
+//    private lazy var trailerButton: UIButton = {
+//        let button = UIButton()
+//        button.setImage(UIImage(named: "details_button"), for: .normal)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        return button
+//    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    private func setUpNavigationBar() {
-        
-    }
+//    private func setUpNavigationBar() {
+//
+//    }
     
 //    private func setUpMoviePosterConstraints() {
 //            view.addSubview(moviePoster)

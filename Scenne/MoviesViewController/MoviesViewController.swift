@@ -9,6 +9,10 @@ import UIKit
 
 class MoviesViewController: UIViewController {
     
+    private var filteredMovies: [Movie] = []
+    var selectedGenre: String?
+    var lastSelectedGenre: String? = nil
+    
     private let searchView: SearchView = {
         let view = SearchView()
         view.layer.cornerRadius = 16
@@ -56,7 +60,7 @@ class MoviesViewController: UIViewController {
         return view
     }()
     
-    weak var delegate: MovieDetailsViewController?
+    
     
     private let genres = ["action", "adventure", "comedy", "drama", "fantasy", "horror", "musicals", "mystery", "romance", "science fiction", "sports", "thriller", "Western"]
     
@@ -181,42 +185,82 @@ class MoviesViewController: UIViewController {
 
 extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        collectionView == movieGenreCollectioView ? genres.count : (collectionView == moviesCollectionView ? movies.count : 0)
+        if collectionView == movieGenreCollectioView {
+            return genres.count
+        } else if collectionView == moviesCollectionView {
+            // Check if there is a selected genre, if so, return the count of filtered movies
+            // Otherwise, return the count of all movies
+            return selectedGenre != nil ? filteredMovies.count : movies.count
+        }
+        return 0
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == self.movieGenreCollectioView {
             let movieGenreCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieGenreCollectionViewCell", for: indexPath) as! MovieGenreCollectionViewCell
             let genre = genres[indexPath.row]
-            
             movieGenreCollectionViewCell.configure(with: genre)
             
-            return movieGenreCollectionViewCell
+            // Highlight the selected genre cell
+            movieGenreCollectionViewCell.isSelected = genre == selectedGenre
             
-        }
-        
-        else if collectionView == self.moviesCollectionView {
+            return movieGenreCollectionViewCell
+        } else if collectionView == self.moviesCollectionView {
             let moviesCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MoviesCollectionViewCell", for: indexPath) as! MoviesCollectionViewCell
             
-            let movie = movies[indexPath.row]
+            // Use the filteredMovies array if there is a selected genre, otherwise use the original movies array
+            let movie = selectedGenre != nil ? filteredMovies[indexPath.row] : movies[indexPath.row]
             moviesCollectionViewCell.configure(with: movie)
             
             return moviesCollectionViewCell
         }
         
         return UICollectionViewCell()
-        
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-           guard let cell = collectionView.cellForItem(at: indexPath) as? MovieGenreCollectionViewCell else {
-               return
-           }
-           cell.backgroundColor = Constants.CellBackGroundColor.backGroundColor
-           cell.setLabelTextColor(UIColor.black)
-           
-       }
+            if collectionView == movieGenreCollectioView {
+                let selectedGenre = genres[indexPath.row]
+
+                // Check if the selected genre is different from the last selected genre
+                if self.lastSelectedGenre != selectedGenre {
+                    self.lastSelectedGenre = selectedGenre
+                    self.selectedGenre = selectedGenre
+
+                    // Perform the filtering operation
+                    filterMoviesByGenre()
+
+                    // Update the appearance of the selected cell
+                    collectionView.reloadData()
+                } else {
+                    // Same genre is selected again, deselect the cell
+                    self.lastSelectedGenre = nil
+                    self.selectedGenre = nil
+
+                    // Perform the filtering operation to show all movies
+                    filterMoviesByGenre()
+
+                    // Update the appearance of the selected cell
+                    collectionView.reloadData()
+                }
+            }
+        }
+    
+    // Helper method to filter movies based on the selected genre
+    private func filterMoviesByGenre() {
+            if let selectedGenre = self.selectedGenre {
+                // Filter the movies array based on the selected genre
+                self.filteredMovies = movies.filter { $0.genre.lowercased() == selectedGenre.lowercased() }
+            } else {
+                // If no genre is selected, show all movies
+                self.filteredMovies = movies
+            }
+
+            // Update the moviesCollectionView to show the filtered or all movies
+            moviesCollectionView.reloadData()
+        }
 }
+
 
 extension MoviesViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -248,4 +292,3 @@ extension MoviesViewController: FilterdViewDelegate {
         }
     }
 }
-

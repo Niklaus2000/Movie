@@ -34,7 +34,15 @@ class MovieGenreCollectionViewCell: UICollectionViewCell {
         layer.borderColor = UIColor.white.cgColor
     }
     
-    private func setupCellLabelConstraints() {
+    var isCellSelected: Bool = false {
+          didSet {
+              // Update the cell's appearance based on the selection state
+              backgroundColor = isCellSelected ? .red : .clear
+              genreLabelView.textColor = isCellSelected ? .black : .white
+          }
+      }
+    
+    func setupCellLabelConstraints() {
         contentView.addSubview(genreLabelView)
         NSLayoutConstraint.activate([
             genreLabelView.topAnchor.constraint(
