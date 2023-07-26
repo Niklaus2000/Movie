@@ -10,8 +10,8 @@ import UIKit
 class MoviesViewController: UIViewController {
     
     private var filteredMovies: [Movie] = []
-    var selectedGenre: String?
-    var lastSelectedGenre: String? = nil
+    private var selectedGenre: String?
+    private var lastSelectedGenre: String? = nil
     
     private let searchView: SearchView = {
         let view = SearchView()
@@ -201,8 +201,8 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let genre = genres[indexPath.row]
             movieGenreCollectionViewCell.configure(with: genre)
             
-            // Highlight the selected genre cell
-            movieGenreCollectionViewCell.isSelected = genre == selectedGenre
+            // Set isCellSelected based on the currently selected genre
+            movieGenreCollectionViewCell.isCellSelected = genre == selectedGenre
             
             return movieGenreCollectionViewCell
         } else if collectionView == self.moviesCollectionView {
@@ -217,6 +217,7 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         return UICollectionViewCell()
     }
+
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             if collectionView == movieGenreCollectioView {
