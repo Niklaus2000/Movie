@@ -36,7 +36,6 @@ class MovieGenreCollectionViewCell: UICollectionViewCell {
     
     var isCellSelected: Bool = false {
           didSet {
-              // Update the cell's appearance based on the selection state
               backgroundColor = isCellSelected ? Constants.CellBackGroundColor.backGroundColor : .clear
               genreLabelView.textColor = isCellSelected ? .black : .white
           }

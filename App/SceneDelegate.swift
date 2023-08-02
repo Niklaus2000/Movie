@@ -17,32 +17,62 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        
-        let viewController = SplashScreenViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
-        
-        window.backgroundColor = .black
-        window.overrideUserInterfaceStyle = .light
-        navigationController.navigationBar.barStyle = .black
-        
-        
-        let tabBarController = UITabBarController()
-        let moviesViewController = MoviesViewController()
-        let favoriteViewController = FavoritesViewController()
-        
-        tabBarController.viewControllers = [moviesViewController, favoriteViewController]
-        tabBarController.modalPresentationStyle = .fullScreen
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.window?.rootViewController = tabBarController
-        }
-        
-        
-        
-        window.rootViewController = navigationController
+        window.rootViewController = TabBarViewController()
         window.makeKeyAndVisible()
+//        window.overrideUserInterfaceStyle = .light
         self.window = window
         
+        
+        
+        
+        //        window = UIWindow(windowScene: windowScene)
+        //
+        //        let tabBarController = TabBarViewController()
+        //
+        //        // Create instances of your View Controllers
+        //        let movieController = MoviesViewController()
+        //        let favoritesController = FavoritesViewController()
+        //
+        //        // Embed each view controller in a navigation controller
+        //        let movieNavController = UINavigationController(rootViewController: movieController)
+        //        let favoritesNavController = UINavigationController(rootViewController: favoritesController)
+        //
+        //        // Set the view controllers for the tab bar controller
+        //        tabBarController.viewControllers = [movieNavController, favoritesNavController]
+        //
+        //        window?.rootViewController = tabBarController
+        //        window?.backgroundColor = .black
+        //        window?.overrideUserInterfaceStyle = .light
+        //        movieNavController.navigationBar.barStyle = .black
+        //        window?.makeKeyAndVisible()
+        
+        
+        //        let window = UIWindow(windowScene: windowScene)
+        //
+        //        let viewController = MoviesViewController()
+        //        let navigationController = UINavigationController(rootViewController: viewController)
+        //
+        //        window.backgroundColor = .black
+        //        window.overrideUserInterfaceStyle = .light
+        //        navigationController.navigationBar.barStyle = .black
+        //
+        //        window.rootViewController = navigationController
+        //        window.makeKeyAndVisible()
+        //        self.window = window
+        
+        
+        
+        //
+        //        let tabBarController = UITabBarController()
+        //        let moviesViewController = MoviesViewController()
+        //        let favoriteViewController = FavoritesViewController()
+        //
+        //        tabBarController.viewControllers = [moviesViewController, favoriteViewController]
+        //        tabBarController.modalPresentationStyle = .fullScreen
+        //
+        //        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        //            self.window?.rootViewController = tabBarController
+        //        }
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -9,9 +9,13 @@ import UIKit
 
 class MoviesViewController: UIViewController {
     
+    
     private var filteredMovies: [Movie] = []
     private var selectedGenre: String?
     private var lastSelectedGenre: String? = nil
+    
+    //weak var delegate: MovieSelectionDelegate?
+    //  private var movie: Movie?
     
     private let searchView: SearchView = {
         let view = SearchView()
@@ -188,8 +192,6 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
         if collectionView == movieGenreCollectioView {
             return genres.count
         } else if collectionView == moviesCollectionView {
-            // Check if there is a selected genre, if so, return the count of filtered movies
-            // Otherwise, return the count of all movies
             return selectedGenre != nil ? filteredMovies.count : movies.count
         }
         return 0
@@ -217,49 +219,45 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         return UICollectionViewCell()
     }
-
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            if collectionView == movieGenreCollectioView {
-                let selectedGenre = genres[indexPath.row]
-
-                // Check if the selected genre is different from the last selected genre
-                if self.lastSelectedGenre != selectedGenre {
-                    self.lastSelectedGenre = selectedGenre
-                    self.selectedGenre = selectedGenre
-
-                    // Perform the filtering operation
-                    filterMoviesByGenre()
-
-                    // Update the appearance of the selected cell
-                    collectionView.reloadData()
-                } else {
-                    // Same genre is selected again, deselect the cell
-                    self.lastSelectedGenre = nil
-                    self.selectedGenre = nil
-
-                    // Perform the filtering operation to show all movies
-                    filterMoviesByGenre()
-
-                    // Update the appearance of the selected cell
-                    collectionView.reloadData()
-                }
-            }
-        }
-    
-    // Helper method to filter movies based on the selected genre
-    private func filterMoviesByGenre() {
-            if let selectedGenre = self.selectedGenre {
-                // Filter the movies array based on the selected genre
-                self.filteredMovies = movies.filter { $0.genre.lowercased() == selectedGenre.lowercased() }
+        if collectionView == movieGenreCollectioView {
+            let selectedGenre = genres[indexPath.row]
+            if self.lastSelectedGenre != selectedGenre {
+                self.lastSelectedGenre = selectedGenre
+                self.selectedGenre = selectedGenre
+                
+                filterMoviesByGenre()
+                
+                collectionView.reloadData()
             } else {
-                // If no genre is selected, show all movies
-                self.filteredMovies = movies
+                self.lastSelectedGenre = nil
+                self.selectedGenre = nil
+                
+                filterMoviesByGenre()
+                
+                collectionView.reloadData()
             }
-
-            // Update the moviesCollectionView to show the filtered or all movies
-            moviesCollectionView.reloadData()
         }
+        
+        if collectionView == moviesCollectionView {
+            guard collectionView.cellForItem(at: indexPath) is MoviesCollectionViewCell else {
+                return
+            }
+            let vc = MovieDetailsViewController()
+            vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    private func filterMoviesByGenre() {
+        if let selectedGenre = self.selectedGenre {
+            self.filteredMovies = movies.filter { $0.genre.lowercased() == selectedGenre.lowercased() }
+        } else {
+            self.filteredMovies = movies
+        }
+        moviesCollectionView.reloadData()
+    }
 }
 
 
@@ -274,7 +272,7 @@ extension MoviesViewController: UICollectionViewDelegateFlowLayout{
             let labelSize = cell.genreLabelView.intrinsicContentSize
             let cellWidth = labelSize.width + 16
             return CGSize(width: cellWidth, height: 26)
-        }else if collectionView == moviesCollectionView{
+        } else if collectionView == moviesCollectionView{
             return CGSize(width: 164, height: 270)
         }
         return CGSize()
