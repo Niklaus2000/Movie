@@ -12,97 +12,99 @@ class MovieDetailsViewController: UIViewController {
     private let moviePoster: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleToFill
-        image.image = UIImage(named: "movie_image1")
+        image.image = Constants.MoviePoster.image
         return image
     }()
     
     private lazy var trailerButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "details_button"), for: .normal)
-        return button
+        makeButton(
+            contentmode: .scaleAspectFill,
+            image: Constants.TrailerButton.image,
+            state: .normal)
     }()
     
-    private let movieTitle: UILabel = {
-        let movieTitle = UILabel()
-        movieTitle.text = "The Atonement"
-        movieTitle.textColor = .white
-        movieTitle.textAlignment = .left
-        movieTitle.font = .boldSystemFont(ofSize: 20)
-        return movieTitle
-    }()
-    private let favoriteButton: UIButton = {
-        let favoriteButton = UIButton()
-        favoriteButton.setImage(UIImage(named: "favorite_image"), for: .normal)
-        favoriteButton.imageView?.contentMode = .scaleAspectFill
-        return favoriteButton
+    private lazy var movieTitle: UILabel = {
+        makeLabel(
+            text: Constants.MovieTitle.text,
+            textFont: Constants.MovieTitle.textFont,
+            textColor: .white,
+            backGroundColor: .clear,
+            textAlignment: .left,
+            cornerRadius: Constants.MovieTitle.cornerRadius,
+            numberOfLines: Constants.MovieTitle.numberOfLines)
     }()
     
-    private let ratingLabel: UILabel = {
-        let ratingLabel = UILabel()
-        ratingLabel.text = "⭐ 7.9"
-        ratingLabel.textColor = .white
-        ratingLabel.backgroundColor = .green
-        ratingLabel.textAlignment = .center
-        ratingLabel.font = .systemFont(ofSize: 14)
-        ratingLabel.layer.cornerRadius = 14
-        
-        return ratingLabel
+    private lazy var favoriteButton: UIButton = {
+        makeButton(
+            contentmode: .scaleAspectFill,
+            image: Constants.FavoriteButton.image,
+            state: .normal)
     }()
     
-    private let genreLabel: UILabel = {
-        let genreLabel = UILabel()
-        genreLabel.textColor = .white
-        genreLabel.backgroundColor = .green
-        genreLabel.textAlignment = .center
-        genreLabel.font = .systemFont(ofSize: 14)
-        genreLabel.text = "Romance"
-        genreLabel.layer.cornerRadius = 14
-        genreLabel.layer.masksToBounds = true
-        
-        return genreLabel
+    private lazy var ratingLabel: UILabel = {
+        makeLabel(
+            text: Constants.RatingLabel.text,
+            textFont: Constants.RatingLabel.textFont,
+            textColor: .white,
+            backGroundColor: Constants.RatingLabel.backGroundColor,
+            textAlignment: .center,
+            cornerRadius: Constants.RatingLabel.cornerRadius,
+            numberOfLines: Constants.RatingLabel.numberOfLines)
+    }()
+    
+    private lazy var genreLabel: UILabel = {
+        makeLabel(
+            text: Constants.GenreLabel.text,
+            textFont: Constants.GenreLabel.textFont,
+            textColor: .white,
+            backGroundColor: Constants.GenreLabel.backGroundColor,
+            textAlignment: .center,
+            cornerRadius: Constants.GenreLabel.cornerRadius,
+            numberOfLines: Constants.GenreLabel.numberOfLines)
     }()
     
     private lazy var movieDurationLabel: UILabel = {
-        let movieDuration = UILabel()
-        movieDuration.textColor = .white
-        movieDuration.backgroundColor = .green
-        movieDuration.textAlignment = .center
-        movieDuration.text = "1,50"
-        movieDuration.font = .systemFont(ofSize: 14)
-        return movieDuration
+        makeLabel(
+            text: Constants.MovieDurationLabel.text,
+            textFont: Constants.MovieDurationLabel.textFont,
+            textColor: .white,
+            backGroundColor: Constants.MovieDurationLabel.backGroundColor,
+            textAlignment: .center,
+            cornerRadius: Constants.MovieDurationLabel.cornerRadius,
+            numberOfLines: Constants.MovieDurationLabel.numberOfLines)
     }()
     
-    private let movieYear: UILabel = {
-        let movieYear = UILabel()
-        movieYear.text = "2007"
-        movieYear.textColor =  .white
-        movieYear.backgroundColor =  .green
-        movieYear.textAlignment = .center
-        movieYear.font = .systemFont(ofSize: 14)
-        movieYear.layer.cornerRadius = 14
-        movieYear.layer.masksToBounds = true
+    private lazy var movieYearLabel: UILabel = {
+        makeLabel(
+            text: Constants.MovieYearLabel.text,
+            textFont: Constants.MovieYearLabel.textFont,
+            textColor: .white,
+            backGroundColor: Constants.MovieYearLabel.backGroundColor,
+            textAlignment: .center,
+            cornerRadius: Constants.MovieYearLabel.cornerRadius,
+            numberOfLines: Constants.MovieYearLabel.numberOfLines)
+    }()
         
-        return movieYear
+    private lazy var aboutMovieLabel: UILabel = {
+        makeLabel(
+            text: Constants.AboutMovieLabel.text,
+            textFont: Constants.AboutMovieLabel.textFont,
+            textColor: .white,
+            backGroundColor: Constants.AboutMovieLabel.backGroundColor,
+            textAlignment: .left,
+            cornerRadius: Constants.AboutMovieLabel.cornerRadius,
+            numberOfLines: Constants.AboutMovieLabel.numberOfLines)
     }()
     
-    private let aboutMovieLabel: UILabel = {
-        let aboutMovieLabel = UILabel()
-        aboutMovieLabel.text = "About movie"
-        aboutMovieLabel.textColor =  .white
-        aboutMovieLabel.textAlignment = .left
-        aboutMovieLabel.font = .boldSystemFont(ofSize: 16)
-        return aboutMovieLabel
-    }()
-    
-    private let descriptionLabel: UILabel = {
-        let descriptionLabel = UILabel()
-        descriptionLabel.text = "Thirteen-year-old fledgling writer Briony Tallis irrevocably changes the course of several lives when she accuses her older sister's lover of a crime he did not commit."
-        descriptionLabel.textColor =  .white
-        descriptionLabel.textAlignment = .left
-        descriptionLabel.numberOfLines = 0
-        descriptionLabel.font = .boldSystemFont(ofSize: 16)
-        
-        return descriptionLabel
+    private lazy var descriptionLabel: UILabel = {
+        makeLabel(
+            text: Constants.DescriptionLabel.text,
+            textFont: Constants.DescriptionLabel.textFont,
+            textColor: .white,
+            backGroundColor: .clear,
+            textAlignment: .left,
+            cornerRadius: Constants.DescriptionLabel.cornerRadius,
+            numberOfLines: Constants.DescriptionLabel.numberOfLines)
     }()
     
     private lazy var stackView: UIStackView = {
@@ -113,10 +115,7 @@ class MovieDetailsViewController: UIViewController {
         stackView.spacing = 8
         
         return stackView
-        
     }()
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,6 +126,41 @@ class MovieDetailsViewController: UIViewController {
         
     }
     
+    private func makeLabel(
+        text: String,
+        textFont: UIFont,
+        textColor: UIColor,
+        backGroundColor: UIColor,
+        textAlignment: NSTextAlignment,
+        cornerRadius: CGFloat,
+        numberOfLines: Int
+    )
+    -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = textFont
+        label.textColor = textColor
+        label.backgroundColor = backGroundColor
+        label.textAlignment = textAlignment
+        label.numberOfLines = numberOfLines
+        
+        return label
+    }
+    
+    private func makeButton(
+        contentmode: UIView.ContentMode,
+        image: UIImage?,
+        state: UIControl.State
+    )
+    -> UIButton {
+        let button = UIButton()
+        button.contentMode = contentmode
+        button.setImage(image, for: state)
+
+        return button
+    }
+    
+    
     
     
     
@@ -135,7 +169,7 @@ class MovieDetailsViewController: UIViewController {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        [ratingLabel, genreLabel, movieDurationLabel, movieYear].forEach {
+        [ratingLabel, genreLabel, movieDurationLabel, movieYearLabel].forEach {
             stackView.addArrangedSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -151,7 +185,7 @@ class MovieDetailsViewController: UIViewController {
         setUpFavoriteButtonConstraints()
         setUpMovieTitleConstraints()
         setUpMovieTitleConstraints()
-        setUpaboutMovieLabelConstraints()
+        setUpaboutMovieConstraints()
         setUpDescriptionConstraints()
         setUpStackView()
     }
@@ -187,7 +221,7 @@ class MovieDetailsViewController: UIViewController {
             moviePoster.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor),
             moviePoster.heightAnchor.constraint(
-                equalToConstant: 380)
+                equalToConstant: Constants.MoviePoster.height)
         ])
     }
     
@@ -195,10 +229,10 @@ class MovieDetailsViewController: UIViewController {
         NSLayoutConstraint.activate([
             trailerButton.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor,
-                constant: -16),
+                constant: Constants.TrailerButton.trailing),
             trailerButton.bottomAnchor.constraint(
                 equalTo: moviePoster.bottomAnchor,
-                constant: -20)
+                constant: Constants.TrailerButton.bottom)
         ])
     }
     
@@ -206,10 +240,10 @@ class MovieDetailsViewController: UIViewController {
         NSLayoutConstraint.activate([
             movieTitle.topAnchor.constraint(
                 equalTo: moviePoster.bottomAnchor,
-                constant: 26),
+                constant: Constants.MovieTitle.top),
             movieTitle.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: 16),
+                constant: Constants.MovieTitle.leading),
         ])
     }
     
@@ -218,25 +252,23 @@ class MovieDetailsViewController: UIViewController {
             favoriteButton.centerYAnchor.constraint(
                 equalTo: movieTitle.centerYAnchor),
             favoriteButton.widthAnchor.constraint(
-                equalToConstant: 50),
+                equalToConstant: Constants.FavoriteButton.width),
             favoriteButton.heightAnchor.constraint(
-                equalToConstant: 50),
+                equalToConstant: Constants.FavoriteButton.height),
             favoriteButton.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -16),
+                constant: Constants.FavoriteButton.trailing),
         ])
     }
     
-    private func setUpaboutMovieLabelConstraints() {
+    private func setUpaboutMovieConstraints() {
         NSLayoutConstraint.activate([
             aboutMovieLabel.topAnchor.constraint(
-                equalTo: movieTitle.bottomAnchor,
-                constant: 64),
+                equalTo: stackView.bottomAnchor,
+                constant: Constants.AboutMovieLabel.top),
             aboutMovieLabel.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: 16),
-            aboutMovieLabel.heightAnchor.constraint(
-                equalToConstant: 21)
+                constant: Constants.AboutMovieLabel.leading)
         ])
     }
     
@@ -244,13 +276,13 @@ class MovieDetailsViewController: UIViewController {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(
                 equalTo: aboutMovieLabel.bottomAnchor,
-                constant: 8),
+                constant: Constants.DescriptionLabel.top),
             descriptionLabel.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: 16),
+                constant: Constants.DescriptionLabel.leading),
             descriptionLabel.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -16),
+                constant: Constants.DescriptionLabel.trailing),
         ])
     }
     
@@ -258,15 +290,15 @@ class MovieDetailsViewController: UIViewController {
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(
                 equalTo: movieTitle.bottomAnchor,
-                constant: 12),
+                constant: Constants.StackView.top),
             stackView.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: 16),
+                constant: Constants.StackView.leading),
             stackView.trailingAnchor.constraint(
                 lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -16),
+                constant: Constants.StackView.trailing),
             stackView.heightAnchor.constraint(
-                equalToConstant: 26)
+                equalToConstant: Constants.StackView.height)
         ])
     }
 }

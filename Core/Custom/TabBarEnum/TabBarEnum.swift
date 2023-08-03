@@ -17,7 +17,7 @@ enum TabBarEnum {
         case .home:
             return MoviesViewController()
         case .favorites:
-            return FavoritesViewController()
+            return FavoriteViewController()
         }
     }
     

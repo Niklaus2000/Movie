@@ -7,9 +7,7 @@
 
 import UIKit
 
-class FavoritesViewController: UIViewController {
-
-    
+class FavoriteViewController: UIViewController {
     
     private lazy var moviesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -26,14 +24,16 @@ class FavoritesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(moviesCollectionView)
+        setupMoviesCollectionViewConstraints()
 
     }
     
     private func setupMoviesCollectionViewConstraints() {
-        view.addSubview(moviesCollectionView)
         NSLayoutConstraint.activate([
             moviesCollectionView.topAnchor.constraint(
-                equalTo: view.bottomAnchor,
+                equalTo: view.topAnchor,
                 constant: 8),
             moviesCollectionView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor, constant: 16),
@@ -46,7 +46,7 @@ class FavoritesViewController: UIViewController {
     
 }
 
-extension FavoritesViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension FavoriteViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         movies.count
     }
@@ -61,18 +61,17 @@ extension FavoritesViewController: UICollectionViewDelegate, UICollectionViewDat
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 164, height: 270)
+        CGSize(width: 150, height: 250)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard collectionView.cellForItem(at: indexPath) is FavoriteCollectionViewCell else {
             return
         }
+        
         let vc = MovieDetailsViewController()
-        vc.delegate = self
-        let navController = UINavigationController(rootViewController: vc)
-        navController.modalPresentationStyle = .fullScreen
-        self.present(navController, animated: true, completion: nil)
+        vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 

@@ -14,9 +14,6 @@ class MoviesViewController: UIViewController {
     private var selectedGenre: String?
     private var lastSelectedGenre: String? = nil
     
-    //weak var delegate: MovieSelectionDelegate?
-    //  private var movie: Movie?
-    
     private let searchView: SearchView = {
         let view = SearchView()
         view.layer.cornerRadius = 16
@@ -40,7 +37,6 @@ class MoviesViewController: UIViewController {
         view.register(MovieGenreCollectionViewCell.self, forCellWithReuseIdentifier: "MovieGenreCollectionViewCell")
         view.delegate = self
         view.dataSource = self
-        //        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -64,20 +60,6 @@ class MoviesViewController: UIViewController {
         return view
     }()
     
-    
-    
-    private let genres = ["action", "adventure", "comedy", "drama", "fantasy", "horror", "musicals", "mystery", "romance", "science fiction", "sports", "thriller", "Western"]
-    
-    private let movies: [Movie] = [
-        Movie(poster: "movie_image1", name: "In the Tall Grass", genre: "Horror", year: 2019),
-        Movie(poster: "movie_image2", name: "Don't Look Up", genre: "Science Fiction", year: 2021),
-        Movie(poster: "movie_image3", name: "The Boss", genre: "Comedy", year: 2016),
-        Movie(poster: "movie_image4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie_image5", name: "The Book Thief", genre: "Drama", year: 2013),
-    ]
-    
-    
-    
     private var titleLabelTopConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
@@ -90,17 +72,6 @@ class MoviesViewController: UIViewController {
         setupMoviesCollectionView()
         movieGenreCollectioView.isHidden = true
         titleLabelTopConstraint.constant = 22
-        
-        //        let tabBarView = CustomTabBar()
-        //        tabBarView.selectedTab = .home
-        //        tabBarView.namespace = "Selected Tab"
-        //        tabBarView.translatesAutoresizingMaskIntoConstraints = false
-        //
-        //        view.addSubview(tabBarView)
-        
-        
-        //        tabBarItem = UITabBarItem(title: "First", image: nil, tag: 0)
-        //        tabBarItem.image = UIImage(named: "home_bar_item")
     }
     
     private func setUp() {
@@ -173,7 +144,6 @@ class MoviesViewController: UIViewController {
     }
     
     private func setupTitleLabelConstraints() {
-        // Set up the top constraint using a ternary operator
         titleLabelTopConstraint = moviesLabelView.topAnchor.constraint(
             equalTo: searchView.bottomAnchor,
             constant: movieGenreCollectioView.isHidden ? 22 : 52)
@@ -273,7 +243,7 @@ extension MoviesViewController: UICollectionViewDelegateFlowLayout{
             let cellWidth = labelSize.width + 16
             return CGSize(width: cellWidth, height: 26)
         } else if collectionView == moviesCollectionView{
-            return CGSize(width: 164, height: 270)
+            return CGSize(width: 150, height: 250)
         }
         return CGSize()
     }
