@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol SearchViewDelegate: AnyObject {
+    func searchViewDidCancel()
+    func searchViewTextDidChange(text: String?)
+}
+
 final class SearchView: UIView {
     
     private let searchImage: UIImageView = {
@@ -19,6 +24,7 @@ final class SearchView: UIView {
         let textField = UITextField()
         textField.placeholder = "Search"
         textField.textColor = .white
+        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         return textField
     }()
     
@@ -29,8 +35,14 @@ final class SearchView: UIView {
         
     }
     
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func clearSearchText() {
+            textField.text = ""
+            textField.resignFirstResponder()
     }
     
     private func setUp() {
@@ -39,6 +51,12 @@ final class SearchView: UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
     }
+    
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+            delegate?.searchViewTextDidChange(text: textField.text)
+        }
+    
+    weak var delegate: SearchViewDelegate?
     
     private func setUpFunc() {
         setImageConstraints()
@@ -70,4 +88,16 @@ final class SearchView: UIView {
                 equalTo: trailingAnchor)
         ])
     }
+}
+
+extension SearchView: SearchViewDelegate {
+    func searchViewDidCancel() {
+        delegate?.searchViewDidCancel()
+    }
+    
+    func searchViewTextDidChange(text: String?) {
+        delegate?.searchViewTextDidChange(text: textField.text)
+    }
+    
+    
 }
