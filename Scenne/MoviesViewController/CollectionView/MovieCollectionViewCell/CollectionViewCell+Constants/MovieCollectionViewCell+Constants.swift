@@ -52,4 +52,4 @@ extension MoviesCollectionViewCell {
         }
     }
 }
- 
+

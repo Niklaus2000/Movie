@@ -23,6 +23,7 @@ extension MovieDetailsViewController {
         
         enum FavoriteButton {
             static let image = UIImage(named: "favorite_image")
+            static let selectedImage = UIImage(named: "selected_favorite_image")
             static let height: CGFloat = 50
             static let width: CGFloat = 50
             static let trailing: CGFloat = -16
@@ -40,7 +41,7 @@ extension MovieDetailsViewController {
         enum RatingLabel {
             static let text = "⭐ 7.9"
             static let textFont: UIFont = .systemFont(ofSize: 14)
-            static let cornerRadius: CGFloat = 22
+            static let cornerRadius: CGFloat = 15
             static let numberOfLines = 0
             static let backGroundColor = UIColor(
                 red: 0.1098,
@@ -52,7 +53,7 @@ extension MovieDetailsViewController {
         enum MovieDurationLabel {
             static let text = "⏱️ 1,50"
             static let textFont: UIFont = .systemFont(ofSize: 14)
-            static let cornerRadius: CGFloat = 22
+            static let cornerRadius: CGFloat = 15
             static let numberOfLines = 0
             static let backGroundColor = UIColor(
                 red: 0.1098,
@@ -64,7 +65,7 @@ extension MovieDetailsViewController {
         enum GenreLabel {
             static let text = "Drama"
             static let textFont: UIFont = .systemFont(ofSize: 14)
-            static let cornerRadius: CGFloat = 22
+            static let cornerRadius: CGFloat = 15
             static let numberOfLines: Int = 0
             static let backGroundColor = UIColor(
                 red: 0.1098,
@@ -76,7 +77,7 @@ extension MovieDetailsViewController {
         enum MovieYearLabel {
             static let text = "2007"
             static let textFont: UIFont = .systemFont(ofSize: 14)
-            static let cornerRadius: CGFloat = 22
+            static let cornerRadius: CGFloat = 15
             static let numberOfLines = 0
             static let backGroundColor = UIColor(
                 red: 0.1098,
@@ -117,6 +118,6 @@ extension MovieDetailsViewController {
             static let height: CGFloat = 26
             static let spacing: CGFloat = 8
         }
-
+        
     }
 }

@@ -9,6 +9,7 @@ import UIKit
 
 class MoviesCollectionViewCell: UICollectionViewCell {
     
+    // MARK: Components
     private let moviePoster: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
@@ -53,23 +54,19 @@ class MoviesCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setUp()
-        setupMoviePosterConstraints()
-        setupGenreLabelContainerViewConstraints()
-        setupMovieNameLabelConstraints()
-        setupMovieYearLabelConstraints()
-        setupFavouriteButtonConstraints()
-        setupMovieGenreLabelConstraints()
+        setUpFunc()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Methods
     private func makeLabel(
         textFont: UIFont,
         textColor: UIColor,
         backGroundColor: UIColor
-
+        
     )
     -> UILabel {
         let label = UILabel()
@@ -88,7 +85,7 @@ class MoviesCollectionViewCell: UICollectionViewCell {
             .forEach {
                 $0.translatesAutoresizingMaskIntoConstraints = false
                 contentView.addSubview($0)
-        }
+            }
         
         genreLabelContainerView.addSubview(movieGenreLabel)
         moviePoster.addSubview(genreLabelContainerView)
@@ -97,6 +94,23 @@ class MoviesCollectionViewCell: UICollectionViewCell {
         
     }
     
+    private func setUpFunc() {
+        setupMoviePosterConstraints()
+        setupGenreLabelContainerViewConstraints()
+        setupMovieNameLabelConstraints()
+        setupMovieYearLabelConstraints()
+        setupFavouriteButtonConstraints()
+        setupMovieGenreLabelConstraints()
+    }
+    
+    func configure(with movie: Movie) {
+        moviePoster.image = UIImage(named: movie.poster)
+        movieNameLabel.text = movie.name
+        movieGenreLabel.text = movie.genre
+        movieYearLabel.text = String(movie.year)
+    }
+    
+    // MARK: Constraints
     private func setupMoviePosterConstraints() {
         NSLayoutConstraint.activate([
             moviePoster.topAnchor.constraint(
@@ -176,12 +190,5 @@ class MoviesCollectionViewCell: UICollectionViewCell {
                 lessThanOrEqualTo: contentView.widthAnchor,
                 constant: Constants.GenreLabelContainerView.width)
         ])
-    }
-    
-    func configure(with movie: Movie) {
-        moviePoster.image = UIImage(named: movie.poster)
-        movieNameLabel.text = movie.name
-        movieGenreLabel.text = movie.genre
-        movieYearLabel.text = String(movie.year)
     }
 }

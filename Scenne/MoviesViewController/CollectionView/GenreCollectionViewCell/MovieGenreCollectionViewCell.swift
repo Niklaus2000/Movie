@@ -10,6 +10,7 @@ import UIKit
 
 class MovieGenreCollectionViewCell: UICollectionViewCell {
     
+    // MARK: Components
     let genreLabelView: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -27,6 +28,7 @@ class MovieGenreCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK:  LayoutSubviews
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = Constants.GenreLabelView.cornerRadius
@@ -36,10 +38,16 @@ class MovieGenreCollectionViewCell: UICollectionViewCell {
     
     var isCellSelected: Bool = false {
           didSet {
-              backgroundColor = isCellSelected ? Constants.CellBackGroundColor.backGroundColor : .clear
+              backgroundColor = isCellSelected ?
+              Constants.CellBackGroundColor.backGroundColor : .clear
               genreLabelView.textColor = isCellSelected ? .black : .white
           }
       }
+    
+    // MARK: Methods
+    func configure(with genre: String) {
+        genreLabelView.text = genre
+    }
     
     func setupCellLabelConstraints() {
         contentView.addSubview(genreLabelView)
@@ -51,13 +59,5 @@ class MovieGenreCollectionViewCell: UICollectionViewCell {
                 equalTo: contentView.leadingAnchor,
                 constant: Constants.GenreLabelView.leading)
         ])
-    }
-    
-    func configure(with genre: String) {
-        genreLabelView.text = genre
-    }
-    
-    func setLabelTextColor(_ color: UIColor) {
-        genreLabelView.textColor = color
     }
 }

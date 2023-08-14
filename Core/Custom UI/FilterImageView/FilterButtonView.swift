@@ -7,14 +7,13 @@
 
 import UIKit
 
-enum ButtonState {
-    case unFilter
-    case filter
-}
+
 
 // MARK: Filter Protocol
 protocol FilterdViewDelegate: AnyObject {
-    func filtredView(_ buttonModeView: FilterButtonView, didButtonStateTo state: ButtonState)
+    func filtredView(
+        _ buttonModeView: FilterButtonView,
+        didButtonStateTo state: ButtonState)
 }
 
 final class FilterButtonView: UIButton {
@@ -38,14 +37,14 @@ final class FilterButtonView: UIButton {
         translatesAutoresizingMaskIntoConstraints = false
         
         addAction(UIAction(handler: {[weak self] _ in
-            self?.switchModeTapped()
+            self?.filltredModeTapped()
         }), for: .touchUpInside)
     }
     
-    // MARK: SwitchMode
-    private func switchModeTapped() {
+    // MARK: FilterMode
+    private func filltredModeTapped() {
         isSelected.toggle()
-        delegate?.filtredView(self, didButtonStateTo: isSelected ? .unFilter : .filter)
+        delegate?.filtredView(self, didButtonStateTo: isSelected ? .unFiltred : .filtred)
     }
 }
 

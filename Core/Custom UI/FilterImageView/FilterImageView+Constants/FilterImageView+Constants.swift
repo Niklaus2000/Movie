@@ -12,10 +12,9 @@ extension FilterButtonView {
         static let unFilter = UIImage(named: "unFilter_image_view")
         static let filter = UIImage(named: "filter_image_view")
     }
-    
-    // MARK: Extension
-    enum ButtonState {
-        case filtred
-        case unFiltred
-    }
+}
+
+enum ButtonState {
+    case filtred
+    case unFiltred
 }

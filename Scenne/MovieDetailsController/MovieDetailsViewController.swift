@@ -9,6 +9,7 @@ import UIKit
 
 class MovieDetailsViewController: UIViewController {
     
+    // MARK: Components
     private let moviePoster: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleToFill
@@ -31,14 +32,20 @@ class MovieDetailsViewController: UIViewController {
             backGroundColor: .clear,
             textAlignment: .left,
             cornerRadius: Constants.MovieTitle.cornerRadius,
-            numberOfLines: Constants.MovieTitle.numberOfLines)
+            numberOfLines: Constants.MovieTitle.numberOfLines,
+            maskBounds: true)
     }()
     
     private lazy var favoriteButton: UIButton = {
-        makeButton(
-            contentmode: .scaleAspectFill,
+        let button = makeButtonSelected(
+            contentmode: .scaleToFill,
             image: Constants.FavoriteButton.image,
-            state: .normal)
+            state: .normal,
+            selectedImage: Constants.FavoriteButton.selectedImage,
+            selectedState: .selected)
+        
+        button.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
+        return button
     }()
     
     private lazy var ratingLabel: UILabel = {
@@ -49,7 +56,8 @@ class MovieDetailsViewController: UIViewController {
             backGroundColor: Constants.RatingLabel.backGroundColor,
             textAlignment: .center,
             cornerRadius: Constants.RatingLabel.cornerRadius,
-            numberOfLines: Constants.RatingLabel.numberOfLines)
+            numberOfLines: Constants.RatingLabel.numberOfLines,
+            maskBounds: true)
     }()
     
     private lazy var genreLabel: UILabel = {
@@ -60,7 +68,8 @@ class MovieDetailsViewController: UIViewController {
             backGroundColor: Constants.GenreLabel.backGroundColor,
             textAlignment: .center,
             cornerRadius: Constants.GenreLabel.cornerRadius,
-            numberOfLines: Constants.GenreLabel.numberOfLines)
+            numberOfLines: Constants.GenreLabel.numberOfLines,
+            maskBounds: true)
     }()
     
     private lazy var movieDurationLabel: UILabel = {
@@ -71,7 +80,7 @@ class MovieDetailsViewController: UIViewController {
             backGroundColor: Constants.MovieDurationLabel.backGroundColor,
             textAlignment: .center,
             cornerRadius: Constants.MovieDurationLabel.cornerRadius,
-            numberOfLines: Constants.MovieDurationLabel.numberOfLines)
+            numberOfLines: Constants.MovieDurationLabel.numberOfLines, maskBounds: true)
     }()
     
     private lazy var movieYearLabel: UILabel = {
@@ -82,9 +91,9 @@ class MovieDetailsViewController: UIViewController {
             backGroundColor: Constants.MovieYearLabel.backGroundColor,
             textAlignment: .center,
             cornerRadius: Constants.MovieYearLabel.cornerRadius,
-            numberOfLines: Constants.MovieYearLabel.numberOfLines)
+            numberOfLines: Constants.MovieYearLabel.numberOfLines, maskBounds: true)
     }()
-        
+    
     private lazy var aboutMovieLabel: UILabel = {
         makeLabel(
             text: Constants.AboutMovieLabel.text,
@@ -93,7 +102,7 @@ class MovieDetailsViewController: UIViewController {
             backGroundColor: Constants.AboutMovieLabel.backGroundColor,
             textAlignment: .left,
             cornerRadius: Constants.AboutMovieLabel.cornerRadius,
-            numberOfLines: Constants.AboutMovieLabel.numberOfLines)
+            numberOfLines: Constants.AboutMovieLabel.numberOfLines, maskBounds: true)
     }()
     
     private lazy var descriptionLabel: UILabel = {
@@ -104,7 +113,8 @@ class MovieDetailsViewController: UIViewController {
             backGroundColor: .clear,
             textAlignment: .left,
             cornerRadius: Constants.DescriptionLabel.cornerRadius,
-            numberOfLines: Constants.DescriptionLabel.numberOfLines)
+            numberOfLines: Constants.DescriptionLabel.numberOfLines, maskBounds: true)
+        
     }()
     
     private lazy var stackView: UIStackView = {
@@ -117,6 +127,7 @@ class MovieDetailsViewController: UIViewController {
         return stackView
     }()
     
+    // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -126,6 +137,11 @@ class MovieDetailsViewController: UIViewController {
         
     }
     
+    // MARK: Methods
+    @objc private func favoriteButtonTapped() {
+        favoriteButton.isSelected.toggle()
+    }
+    
     private func makeLabel(
         text: String,
         textFont: UIFont,
@@ -133,7 +149,8 @@ class MovieDetailsViewController: UIViewController {
         backGroundColor: UIColor,
         textAlignment: NSTextAlignment,
         cornerRadius: CGFloat,
-        numberOfLines: Int
+        numberOfLines: Int,
+        maskBounds: Bool
     )
     -> UILabel {
         let label = UILabel()
@@ -143,6 +160,8 @@ class MovieDetailsViewController: UIViewController {
         label.backgroundColor = backGroundColor
         label.textAlignment = textAlignment
         label.numberOfLines = numberOfLines
+        label.layer.cornerRadius = cornerRadius
+        label.layer.masksToBounds = maskBounds
         
         return label
     }
@@ -156,23 +175,48 @@ class MovieDetailsViewController: UIViewController {
         let button = UIButton()
         button.contentMode = contentmode
         button.setImage(image, for: state)
-
+        
         return button
     }
     
-    
-    
-    
+    private func makeButtonSelected(
+        contentmode: UIView.ContentMode,
+        image: UIImage?,
+        state: UIControl.State,
+        selectedImage: UIImage?,
+        selectedState: UIControl.State
+    )
+    -> UIButton {
+        let button = UIButton()
+        button.contentMode = contentmode
+        button.setImage(image, for: state)
+        button.setImage(selectedImage, for: selectedState)
+        
+        return button
+    }
     
     private func setUp() {
-        [moviePoster, movieTitle, favoriteButton, stackView, aboutMovieLabel, descriptionLabel].forEach {
-            view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-        [ratingLabel, genreLabel, movieDurationLabel, movieYearLabel].forEach {
-            stackView.addArrangedSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
+        [
+            moviePoster,
+            movieTitle,
+            favoriteButton,
+            stackView,
+            aboutMovieLabel,
+            descriptionLabel]
+            .forEach {
+                view.addSubview($0)
+                $0.translatesAutoresizingMaskIntoConstraints = false
+            }
+        
+        [
+            ratingLabel,
+            genreLabel,
+            movieDurationLabel,
+            movieYearLabel]
+            .forEach {
+                stackView.addArrangedSubview($0)
+                $0.translatesAutoresizingMaskIntoConstraints = false
+            }
         
         moviePoster.addSubview(trailerButton)
         trailerButton.translatesAutoresizingMaskIntoConstraints = false
@@ -194,7 +238,6 @@ class MovieDetailsViewController: UIViewController {
     
     private func setUpNavigationBar() {
         self.title = "Details"
-            
         
         let titleAttributes = [
             NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20),
@@ -212,6 +255,7 @@ class MovieDetailsViewController: UIViewController {
         }
     }
     
+    // MARK: Constraints
     private func setUpMoviePosterConstraints() {
         NSLayoutConstraint.activate([
             moviePoster.topAnchor.constraint(
@@ -235,6 +279,7 @@ class MovieDetailsViewController: UIViewController {
                 constant: Constants.TrailerButton.bottom)
         ])
     }
+    
     
     private func setUpMovieTitleConstraints() {
         NSLayoutConstraint.activate([

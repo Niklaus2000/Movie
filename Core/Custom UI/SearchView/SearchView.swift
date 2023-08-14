@@ -7,6 +7,7 @@
 
 import UIKit
 
+// MARK: SearchViewDelegate
 protocol SearchViewDelegate: AnyObject {
     func searchViewDidCancel()
     func searchViewTextDidChange(text: String?)
@@ -14,20 +15,25 @@ protocol SearchViewDelegate: AnyObject {
 
 final class SearchView: UIView {
     
+    // MARK: Component
     private let searchImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "search_image")
+        imageView.image = Constants.ImageView.image
         return imageView
     }()
     
     private let textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Search"
+        textField.placeholder = Constants.TextField.text
         textField.textColor = .white
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         return textField
     }()
     
+    // MARK: Properties
+    weak var delegate: SearchViewDelegate?
+    
+    // MARK: init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUp()
@@ -35,14 +41,14 @@ final class SearchView: UIView {
         
     }
     
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Methods
     func clearSearchText() {
-            textField.text = ""
-            textField.resignFirstResponder()
+        textField.text = ""
+        textField.resignFirstResponder()
     }
     
     private func setUp() {
@@ -53,34 +59,33 @@ final class SearchView: UIView {
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
-            delegate?.searchViewTextDidChange(text: textField.text)
-        }
-    
-    weak var delegate: SearchViewDelegate?
+        delegate?.searchViewTextDidChange(text: textField.text)
+    }
     
     private func setUpFunc() {
         setImageConstraints()
         setTextFieldConstraints()
     }
     
+    // MARK: Constraints
     private func setImageConstraints() {
         NSLayoutConstraint.activate([
             searchImage.topAnchor.constraint(
-                equalTo: topAnchor, constant: 11),
+                equalTo: topAnchor, constant: Constants.ImageView.top),
             searchImage.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
                 constant: Constants.ImageView.leading),
             searchImage.heightAnchor.constraint(
-                equalToConstant: 13),
+                equalToConstant: Constants.ImageView.height),
             searchImage.widthAnchor.constraint(
-                equalToConstant: 15)
+                equalToConstant: Constants.ImageView.widthh)
         ])
     }
     
     private func setTextFieldConstraints() {
         NSLayoutConstraint.activate([
             textField.topAnchor.constraint(
-                equalTo: topAnchor, constant: 9),
+                equalTo: topAnchor, constant: Constants.TextField.top),
             textField.leadingAnchor.constraint(
                 equalTo: searchImage.trailingAnchor,
                 constant: Constants.TextField.leading),
@@ -90,6 +95,7 @@ final class SearchView: UIView {
     }
 }
 
+// MARK: - SearchViewDelegate
 extension SearchView: SearchViewDelegate {
     func searchViewDidCancel() {
         delegate?.searchViewDidCancel()
@@ -98,6 +104,4 @@ extension SearchView: SearchViewDelegate {
     func searchViewTextDidChange(text: String?) {
         delegate?.searchViewTextDidChange(text: textField.text)
     }
-    
-    
 }

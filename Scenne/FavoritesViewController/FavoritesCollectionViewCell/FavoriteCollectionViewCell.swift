@@ -68,6 +68,7 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Methods
     private func makeLabel(
         textFont: UIFont,
         textColor: UIColor,
@@ -100,6 +101,14 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         
     }
     
+    func configure(with movie: Movie) {
+        moviePoster.image = UIImage(named: movie.poster)
+        movieNameLabel.text = movie.name
+        movieGenreLabel.text = movie.genre
+        movieYearLabel.text = String(movie.year)
+    }
+    
+    // MARK: Constraint
     private func setupMoviePosterConstraints() {
         NSLayoutConstraint.activate([
             moviePoster.topAnchor.constraint(
@@ -179,12 +188,5 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
                 lessThanOrEqualTo: contentView.widthAnchor,
                 constant: Constants.GenreLabelContainerView.width)
         ])
-    }
-    
-    func configure(with movie: Movie) {
-        moviePoster.image = UIImage(named: movie.poster)
-        movieNameLabel.text = movie.name
-        movieGenreLabel.text = movie.genre
-        movieYearLabel.text = String(movie.year)
     }
 }

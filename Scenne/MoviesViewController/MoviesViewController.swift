@@ -9,14 +9,16 @@ import UIKit
 
 class MoviesViewController: UIViewController {
     
-    
+    // MARK: Properties
     private var filteredMovies: [Movie] = []
     private var selectedGenre: String?
     private var lastSelectedGenre: String? = nil
+    private var titleLabelTopConstraint: NSLayoutConstraint!
     
+    // MARK: Components
     private lazy var searchView: SearchView = {
         let view = SearchView()
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.SearchView.cornerRadius
         view.backgroundColor = Constants.SearchView.backGroundColor
         view.delegate = self
         return view
@@ -35,24 +37,24 @@ class MoviesViewController: UIViewController {
         view.isScrollEnabled = true
         view.backgroundColor = .clear
         view.layer.borderColor = UIColor.white.cgColor
-        view.register(MovieGenreCollectionViewCell.self, forCellWithReuseIdentifier: "MovieGenreCollectionViewCell")
-        view.delegate = self
-        view.dataSource = self
+        view.register(
+            MovieGenreCollectionViewCell.self,
+            forCellWithReuseIdentifier: Constants.MovieGenreCollectionView.cellGenre)
         return view
     }()
     
     private let moviesLabelView: UILabel = {
         let label = UILabel()
-        label.text = "Movies"
-        label.font = Constants.MoviesLaabelView.textSize
-        label.textColor = Constants.MoviesLaabelView.textColor
+        label.text = Constants.MoviesLabel.text
+        label.font = Constants.MoviesLabel.textSize
+        label.textColor = Constants.MoviesLabel.textColor
         return label
     }()
     
     private lazy var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("cancel", for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 10)
+        button.setTitle(Constants.CancelButton.text, for: .normal)
+        button.titleLabel?.font = Constants.CancelButton.textFont
         button.addAction(UIAction(handler: {[weak self] _ in
             self?.cancelButtonTapped()
         }), for: .touchUpInside)
@@ -65,28 +67,21 @@ class MoviesViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.isScrollEnabled = true
         view.backgroundColor = .clear
-        view.register(MoviesCollectionViewCell.self, forCellWithReuseIdentifier: "MoviesCollectionViewCell")
-        view.delegate = self
-        view.dataSource = self
+        view.register(
+            MoviesCollectionViewCell.self,
+            forCellWithReuseIdentifier: Constants.MovieCollectionView.cellMovie)
         return view
     }()
     
-    private var titleLabelTopConstraint: NSLayoutConstraint!
-    
+    // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
-        setUpSearchViewConstraints()
-        setUpFilterImageView()
-        setupGenreCollectionViewConstraints()
-        setupTitleLabelConstraints()
-        setupMoviesCollectionView()
-        setupCancelButtonConstraints()
-        movieGenreCollectioView.isHidden = true
-        cancelButton.isHidden = true
-        titleLabelTopConstraint.constant = 22
+        setUpFunc()
+        setUpDevaultValues()
     }
     
+    // MARK: Methods
     private func setUp() {
         [
             searchView,
@@ -99,8 +94,36 @@ class MoviesViewController: UIViewController {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        [
+            movieGenreCollectioView,
+            moviesCollectionView
+        ].forEach {
+            $0.delegate = self
+            $0.dataSource = self
+        }
     }
     
+    private func setUpFunc() {
+        setUpSearchViewConstraints()
+        setUpFilterImageView()
+        setupGenreCollectionViewConstraints()
+        setupTitleLabelConstraints()
+        setupMoviesCollectionView()
+        setupCancelButtonConstraints()
+    }
+    
+    private func setUpDevaultValues() {
+        movieGenreCollectioView.isHidden = true
+        cancelButton.isHidden = true
+        titleLabelTopConstraint.constant = Constants.ButtonView.unSelectedFilterTop
+    }
+    
+    @objc private func cancelButtonTapped() {
+        buttonView.isHidden = false
+        cancelButton.isHidden = true
+    }
+    
+    // MARK: Contraints
     private func setUpFilterImageView() {
         NSLayoutConstraint.activate([
             buttonView.topAnchor.constraint(
@@ -132,28 +155,27 @@ class MoviesViewController: UIViewController {
         NSLayoutConstraint.activate([
             movieGenreCollectioView.topAnchor.constraint(
                 equalTo: searchView.bottomAnchor,
-                constant: 8),
+                constant: Constants.MovieGenreCollectionView.top),
             movieGenreCollectioView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
-                constant: 20),
+                constant: Constants.MovieGenreCollectionView.leading),
             movieGenreCollectioView.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor),
             movieGenreCollectioView.heightAnchor.constraint(
-                equalToConstant: 30)
+                equalToConstant: Constants.MovieGenreCollectionView.height)
         ])
     }
     
     private func setupMoviesCollectionView() {
-        view.addSubview(moviesCollectionView)
         NSLayoutConstraint.activate([
             moviesCollectionView.topAnchor.constraint(
                 equalTo: moviesLabelView.bottomAnchor),
             moviesCollectionView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
-                constant: 16),
+                constant: Constants.MovieCollectionView.leading),
             moviesCollectionView.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor,
-                constant: -16),
+                constant: Constants.MovieCollectionView.trailing),
             moviesCollectionView.bottomAnchor.constraint(
                 equalTo: view.bottomAnchor)
         ])
@@ -163,37 +185,33 @@ class MoviesViewController: UIViewController {
         NSLayoutConstraint.activate([
             cancelButton.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: 4),
+                constant: Constants.CancelButton.top),
             cancelButton.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor,
-                constant: -13),
+                constant: Constants.CancelButton.trailing),
             cancelButton.widthAnchor.constraint(
-                equalToConstant: 36),
+                equalToConstant: Constants.CancelButton.width),
             cancelButton.leadingAnchor.constraint(
-                equalTo: searchView.trailingAnchor, constant: 8)
-            
+                equalTo: searchView.trailingAnchor,
+                constant: Constants.CancelButton.leading)
         ])
     }
     
     private func setupTitleLabelConstraints() {
         titleLabelTopConstraint = moviesLabelView.topAnchor.constraint(
             equalTo: searchView.bottomAnchor,
-            constant: movieGenreCollectioView.isHidden ? 22 : 52)
+            constant: movieGenreCollectioView.isHidden ? Constants.ButtonView.unSelectedFilterTop : Constants.ButtonView.selectedFilterTop)
         
         NSLayoutConstraint.activate([
             titleLabelTopConstraint,
             moviesLabelView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
-                constant: 16),
+                constant: Constants.MoviesLabel.leading),
         ])
-    }
-    
-    @objc private func cancelButtonTapped() {
-        buttonView.isHidden = false
-        cancelButton.isHidden = true
     }
 }
 
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == movieGenreCollectioView {
@@ -206,18 +224,19 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == self.movieGenreCollectioView {
-            let movieGenreCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieGenreCollectionViewCell", for: indexPath) as! MovieGenreCollectionViewCell
+            let movieGenreCollectionViewCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: Constants.MovieGenreCollectionView.cellGenre,
+                for: indexPath) as! MovieGenreCollectionViewCell
             let genre = genres[indexPath.row]
             movieGenreCollectionViewCell.configure(with: genre)
             
-            // Set isCellSelected based on the currently selected genre
+            
             movieGenreCollectionViewCell.isCellSelected = genre == selectedGenre
             
             return movieGenreCollectionViewCell
         } else if collectionView == self.moviesCollectionView {
-            let moviesCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MoviesCollectionViewCell", for: indexPath) as! MoviesCollectionViewCell
+            let moviesCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.MovieCollectionView.cellMovie, for: indexPath) as! MoviesCollectionViewCell
             
-            // Use the filteredMovies array if there is a selected genre, otherwise use the original movies array
             let movie = selectedGenre != nil ? filteredMovies[indexPath.row] : movies[indexPath.row]
             moviesCollectionViewCell.configure(with: movie)
             
@@ -267,74 +286,47 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension MoviesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == movieGenreCollectioView {
             let genre = genres[indexPath.row]
-            let labelWidth = genre.size(withAttributes: [.font: Constants.MoviesLaabelView.textSize]).width + 16
-            return CGSize(width: labelWidth, height: 26)
+            let labelWidth = genre.size(withAttributes: [
+                .font: Constants.MoviesLabel.textSize])
+                .width + Constants.MoviesLabel.leading
+            return CGSize(
+                width: labelWidth,
+                height: Constants.MoviesLabel.height)
         } else if collectionView == moviesCollectionView {
-            return CGSize(width: 150, height: 250)
+            return CGSize(
+                width: Constants.MovieCollectionView.width,
+                height: Constants.MovieCollectionView.height)
         }
         return CGSize()
     }
 }
 
+// MARK: - FilterdViewDelegate
 extension MoviesViewController: FilterdViewDelegate {
     func filtredView(_ buttonModeView: FilterButtonView, didButtonStateTo state: ButtonState) {
         switch state {
-        case .filter:
+        case .filtred:
             movieGenreCollectioView.isHidden = true
-            titleLabelTopConstraint.constant = 22
-        case .unFilter:
+            titleLabelTopConstraint.constant = Constants.ButtonView.unSelectedFilterTop
+        case .unFiltred:
             movieGenreCollectioView.isHidden = false
-            titleLabelTopConstraint.constant = 52
+            titleLabelTopConstraint.constant =  Constants.ButtonView.unSelectedFilterTop
         }
     }
 }
 
-//extension MoviesViewController: SearchViewDelegate {
-//    func searchViewDidCancel() {
-//        searchView.textField.text = ""
-//        searchView.textField.resignFirstResponder()
-//        cancelButtonTapped()
-//    }
-//
-//    func searchViewTextDidChange(text: String?) {
-//        if let text = text, !text.isEmpty {
-//            cancelButton.isHidden = false
-//            buttonView.isHidden = true
-//        } else {
-//            cancelButton.isHidden = true
-//            buttonView.isHidden = false
-//        }
-//    }
-//}
-
-//extension MoviesViewController: SearchViewDelegate {
-//    func searchViewDidCancel() {
-//        searchView.searchText = ""
-//        searchView.se.resignFirstResponder()
-//        cancelButtonTapped()
-//    }
-//
-//    func searchViewTextDidChange(text: String?) {
-//        if let text = text, !text.isEmpty {
-//            cancelButton.isHidden = false
-//            buttonView.isHidden = true
-//        } else {
-//            cancelButton.isHidden = true
-//            buttonView.isHidden = false
-//        }
-//    }
-//}
-
+// MARK: - FilterdViewDelegate
 extension MoviesViewController: SearchViewDelegate {
     func searchViewDidCancel() {
         searchView.clearSearchText()
         cancelButtonTapped()
     }
-
+    
     func searchViewTextDidChange(text: String?) {
         if let text = text, !text.isEmpty {
             cancelButton.isHidden = false

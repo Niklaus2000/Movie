@@ -9,7 +9,6 @@ import UIKit
 
 extension SearchView {
     enum Constants {
-        
         enum MainView {
             static let top: CGFloat = 19
             static let leading: CGFloat = 16
@@ -28,6 +27,8 @@ extension SearchView {
             static let image = UIImage(named: "search_image")
             static let top: CGFloat = 11
             static let leading: CGFloat = 24
+            static let height: CGFloat = 15
+            static let widthh: CGFloat = 15
         }
     }
 }
